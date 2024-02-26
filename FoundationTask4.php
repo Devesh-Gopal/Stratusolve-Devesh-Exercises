@@ -31,5 +31,3 @@ $ItemsArr = array
 );
 
 echo json_encode(ItemOwners::groupByOwners($ItemsArr));
-
-
