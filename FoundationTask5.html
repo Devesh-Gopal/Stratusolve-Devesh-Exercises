@@ -1,0 +1,49 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        //Waits for the document to be fully loaded
+        $(document).ready(function(){
+            // A submit handler is attached to the form
+            $("form").submit(function(e){
+                // Prevent the default form submission behavior
+                e.preventDefault();
+
+                // Get the maxNumber value that the user entered
+                var maxNumber = $("#maxNumber").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "FoundationTask5.php",
+                    data: { maxNumber: maxNumber },
+                    success: function(response){
+                        // Display the response on the screen
+                        $("#result").html("Result: " + response);
+                    },
+
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<h2>Fibonacci Sequence Generator</h2>
+
+<form>
+    <label for="maxNumber">Maximum Number for the sequence:</label><br>
+    <input type="number" id="maxNumber" name="maxNumber" value="0"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<div id="result"></div>
+
+</body>
+</html>
+
+
+
+
+
+
+
