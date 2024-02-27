@@ -1,5 +1,6 @@
 <?php
 
+
 class ItemOwners {
     public static function groupByOwners($ItemsArr)
     {
@@ -23,6 +24,7 @@ class ItemOwners {
     }
 }
 
+//keys-items, Values-Owners
 $ItemsArr = array
 (
     "Baseball Bat" => "John",

@@ -1,4 +1,6 @@
 <?php
+//program that generates and prints a fibonacci sequence up to a given maximum value.
+
 //Recursive function
     function Fibonacci($n)
     {
@@ -22,3 +24,5 @@
     }
 
     echo "Fibonacci Sequence: " . implode(" ", $fibonacciSequence) . "\n";
+
+

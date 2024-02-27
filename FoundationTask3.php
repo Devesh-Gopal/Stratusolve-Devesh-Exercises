@@ -1,9 +1,9 @@
 <?php
-
+// Determine if a given string is a palindrome or not.
 class Palindrome {
     public static function isPalindrome($word)
     {
-        //Spaces are removed and lowercase is done to ignore character case
+        //Spaces are removed and lowercase is done to ignore character case(String Cleaning)
         $word = str_replace(' ', '', strtolower($word));
 
         //Cleaned word must be identical to its reverse. strrev- used to reverse a string
