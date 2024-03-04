@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin page</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="FoundationTask7.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+</head>
+<body>
+
+<div class="container">
+    <div class="admin-CRUD Person-form-container">
+        <form id="personForm">
+            <h3>add a new person</h3>
+            <input type="text" placeholder="Enter First Name" name="firstName" class="box">
+            <input type="text" placeholder="Enter Surname" name="surname" class="box">
+            <input type="date" placeholder="Enter DOB" name="dateOfBirth" class="box">
+            <input type="text" placeholder="Enter Email Address" name="emailAddress" class="box">
+            <input type="number" placeholder="Enter Age" name="age" class="box">
+            <button type="button" class="btn" onclick="addPerson()">Add Person</button>
+        </form>
+    </div>
+
+    <div class="person-display">
+        <table id="personTable" class="person-display-table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Date Of Birth</th>
+                <th>Email Address</th>
+                <th>Age</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="personTableBody">
+            <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function addPerson() {
+        // Get form data
+        var formData = {
+            firstName: document.forms["personForm"]["firstName"].value,
+            surname: document.forms["personForm"]["surname"].value,
+            dateOfBirth: document.forms["personForm"]["dateOfBirth"].value,
+            emailAddress: document.forms["personForm"]["emailAddress"].value,
+            age: document.forms["personForm"]["age"].value
+        };
+
+        // Validate form data (you may add more validation as needed)
+
+        // Create a new table row
+        var newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td>${formData.firstName}</td>
+            <td>${formData.surname}</td>
+            <td>${formData.dateOfBirth}</td>
+            <td>${formData.emailAddress}</td>
+            <td>${formData.age}</td>
+            <td>
+                <a href="#" class="btn"> <i class="fas fa-edit"></i> edit </a>
+                <a href="#" class="btn"> <i class="fas fa-trash"></i> delete </a>
+            </td>
+        `;
+
+        // Append the new row to the table
+        document.getElementById("personTableBody").appendChild(newRow);
+
+        // Clear the form
+        document.getElementById("personForm").reset();
+
+        // Send an AJAX request using jQuery
+        $.ajax({
+            type: "POST",
+            url: "FoundationTask7.php",
+            data: formData,
+            success: function(response) {
+                // Handle the success response
+                console.log(response);
+                // You may update the frontend or perform additional actions here
+            },
+            error: function(xhr, status, error) {
+                // Handle the error response
+                console.error("Error:", xhr.statusText);
+            }
+        });
+
+        // Clear the form
+        document.getElementById("personForm").reset();
+    }
+    // Get the table rows from the server
+    function getPersons() {
+        $.ajax({
+            type: "POST",
+            url: "FoundationTask7.php",
+            data: { action: "getPersons" }, // Add a parameter to indicate the action
+            success: function(response) {
+                // Handle the success response
+                console.log(response);
+
+                // Parse the JSON response and append rows to the table
+                var persons = JSON.parse(response);
+                for (var i = 0; i < persons.length; i++) {
+                    var person = persons[i];
+                    var newRow = `<tr>
+                        <td>${person.firstName}</td>
+                        <td>${person.surname}</td>
+                        <td>${person.dateOfBirth}</td>
+                        <td>${person.emailAddress}</td>
+                        <td>${person.age}</td>
+                        <td>
+                            <a href="#" class="btn"> <i class="fas fa-edit"></i> edit </a>
+                            <a href="#" class="btn"> <i class="fas fa-trash"></i> delete </a>
+                        </td>
+                    </tr>`;
+                    $("#personTableBody").append(newRow);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle the error response
+                console.error("Error:", xhr.statusText);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
