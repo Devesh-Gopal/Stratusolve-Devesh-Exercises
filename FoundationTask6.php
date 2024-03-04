@@ -1,4 +1,7 @@
 <?php
+require_once 'vendor/autoload.php'; //loads the Faker library files-generates fake data .
+use Faker\Factory as Faker;
+
 //Database connection
 $servername = "127.0.0.1";
 $username = "root";
@@ -28,6 +31,11 @@ class Person {
     // Methods-functions
     //Inserts a new person into the database
     public function createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age) {
+
+        $birthDate = new DateTime($dateOfBirth);
+        $currentDate = new DateTime();
+        $age = $birthDate->diff($currentDate)->y;
+
         $sql = "INSERT INTO Person (FirstName, Surname, DateOfBirth, EmailAddress, Age)
                 VALUES ('$firstName', '$surname', '$dateOfBirth', '$emailAddress', '$age')";
 
@@ -61,7 +69,6 @@ class Person {
         return $result->fetch_assoc();
     }
 
-
     // Saves a person to the database
     public function savePerson() {
         $sql = "INSERT INTO Person (FirstName, Surname, DateOfBirth, EmailAddress, Age)
@@ -84,12 +91,11 @@ class Person {
     }
 
     // Loads all people from the database
-    // Loads all people from the database
     public function loadAllPeople() {
         $sql = "SELECT * FROM Person";
         $result = $this->conn->query($sql);
 
-        // Error handling
+        // Error handling-checks if the query was successful
         if ($result === FALSE) {
             echo "Error loading all people: " . $this->conn->error;
 
@@ -105,7 +111,6 @@ class Person {
         return $allPeople;
     }
 
-
     // Deletes all people from the database
     public function deleteAllPeople() {
         $sql = "DELETE FROM Person";
@@ -115,9 +120,7 @@ class Person {
         } else {
             echo "Error deleting all records: " . $this->conn->error;
         }
-
     }
-
 }
 
 // Create an instance of the Person class with the database connection
@@ -149,11 +152,40 @@ $person = new Person($conn);
 //$person->deletePerson(1);
 
 // Load all people
-//$allPeople = $person->loadAllPeople();
-//print_r($allPeople);
+$allPeople = $person->loadAllPeople();
+print_r($allPeople);
 
 // Delete all people
 //$person->deleteAllPeople();
 
-$conn->close();
+// Generate and insert 10 random people into the database
+$faker = Faker::create();
+for ($i = 0; $i < 10; $i++) {
+    $firstName = $faker->firstName;
+    $surname = $faker->lastName;
+    $dateOfBirth = $faker->date($format = 'Y-m-d', $max = 'now');
+    $emailAddress = $faker->email;
 
+
+    // Create a new person in the database
+    $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, 0);
+
+// Starting clock time in seconds
+    $start_time = microtime(true);
+    $a = 1;
+
+// Start loop
+    for ($i = 1; $i <= 10000000; $i++) {
+        $a++;
+    }
+
+// End clock time in seconds
+    $end_time = microtime(true);
+
+// Calculating the script execution time
+    $execution_time = $end_time - $start_time;
+
+    echo " Execution time of script = " . $execution_time . " seconds";
+}
+
+$conn->close();
