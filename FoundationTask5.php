@@ -1,13 +1,13 @@
 <?php
 
-//program that generates and prints a fibonacci sequence up to a given maximum value.
-function generateFibonacci($maxValue) {
-    $fibonacciSequence = []; //Storing the fibonacci sequence into an array
+// Program that generates and prints a Fibonacci sequence up to a given maximum value.
+function generateFibonacciSequence(int $maxValue): array {
+    $fibonacciSequence = []; // Storing the Fibonacci sequence into an array
 
-    //While Loop
+    // While Loop
     $i = 0; // Sequence starts at 0.
-    while (fibonacci($i) <= $maxValue) {
-        $fibonacciSequence[] = fibonacci($i); // adds a number to the fibonacci sequence array
+    while (calculateFibonacci($i) <= $maxValue) {
+        $fibonacciSequence[] = calculateFibonacci($i); // Adds a number to the Fibonacci sequence array
         $i++;
     }
 
@@ -15,13 +15,13 @@ function generateFibonacci($maxValue) {
 }
 
 // Recursive function to calculate Fibonacci number at a given index
-function fibonacci($n) {
-    //Base Case - includes termination condition
+function calculateFibonacci(int $n): int {
+    // Base Case - includes termination condition
     if ($n <= 1) {
         return $n;
     }
-    //Recursive case
-    return fibonacci($n - 1) + fibonacci($n - 2); //Indices of the fibonacci sequence
+    // Recursive case
+    return calculateFibonacci($n - 1) + calculateFibonacci($n - 2); // Indices of the Fibonacci sequence
 }
 
 // Check if the maxNumber parameter is set in the URL
@@ -30,12 +30,14 @@ if (isset($_POST['maxNumber'])) {
     $maxValue = (int)$_POST['maxNumber'];
 
     // Fibonacci sequence generated based on the received user input
-    $fibonacciSequence = generateFibonacci($maxValue);
+    $fibonacciSequence = generateFibonacciSequence($maxValue);
 
     // Fibonacci sequence displayed
-    echo " The Fibonacci Sequence up to {$maxValue} is: " . implode(" ", $fibonacciSequence) . "\n";
+    echo "The Fibonacci Sequence up to {$maxValue} is: " . implode(" ", $fibonacciSequence) . "\n";
 } else {
     // If maxNumber is not provided, display a message
     echo "Please enter a maximum number in the form.";
 }
+
+
 

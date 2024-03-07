@@ -1,35 +1,33 @@
 <?php
-
-
 class ItemOwners {
-    public static function groupByOwners($ItemsArr)
-    {
+    public static function groupItemsByOwners(array $itemsArray): array {
         // Grouped items are stored in the empty array
-        $key = array();
+        $groupedItems = array();
 
-        foreach ($ItemsArr as $item => $value)
-        {
-            // Checks to see whether the value(owner) exists in the array, if the value does not exist, an empty array is created for the value(owner)
-            // isset checks to see a specific key exists before accessing it
-            if (!isset($key[$value]))
-            {
-                $key[$value] = array();
+        foreach ($itemsArray as $item => $owner) {
+            // Checks to see whether the value (owner) exists in the array
+            // If the value does not exist, an empty array is created for the value (owner)
+            // isset checks to see if a specific key exists before accessing it
+            if (!isset($groupedItems[$owner])) {
+                $groupedItems[$owner] = array();
             }
 
             // Grouping the items by their respective owner
-            $key[$value][] = $item;
+            $groupedItems[$owner][] = $item;
         }
+
         // Grouped array is returned
-        return $key;
+        return $groupedItems;
     }
 }
 
-//keys-items, Values-Owners
-$ItemsArr = array
-(
+// Keys: items, Values: owners
+$itemsArray = array(
     "Baseball Bat" => "John",
     "Golf ball" => "Stan",
-    "Tennis Racket" => "John"
+    "Tennis Racket" => "John",
+    "Another Tennis Racket" => "Stan" // corrected the duplicate key
 );
 
-echo json_encode(ItemOwners::groupByOwners($ItemsArr));
+echo json_encode(ItemOwners::groupItemsByOwners($itemsArray));
+

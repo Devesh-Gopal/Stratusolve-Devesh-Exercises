@@ -1,24 +1,23 @@
 <?php
 
-//Database connection
-$servername = "127.0.0.1";
-$username = "root";
-$password = "Devesh0905";
-$dbname = "Person";
+// Database connection
+$SERVER_NAME = "127.0.0.1";
+$USERNAME = "root";
+$PASSWORD = "Devesh0905";
+$DB_NAME = "Person";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// User Class-Properties and methods defined
+// User class - Properties and methods defined
 class Person
 {
-
-    // Properties- representing the attributes of a person
+    // Properties representing the attributes of a person
     public $firstName, $surname, $dateOfBirth, $emailAddress, $age;
     private $conn; // holds db connection
 
@@ -29,10 +28,10 @@ class Person
     }
 
     // Methods-functions
-    //Inserts a new person into the database
-    public function createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age)
-    {
 
+    // Inserts a new person into the database
+    public function createPerson(string $firstName, string $surname, string $dateOfBirth, string $emailAddress, int $age): array
+    {
         $birthDate = new DateTime($dateOfBirth);
         $currentDate = new DateTime();
         $age = $birthDate->diff($currentDate)->y;
@@ -42,74 +41,74 @@ class Person
 
         // Error handling
         if ($this->conn->query($sql) === FALSE) {
-            echo json_encode(["success" => false, "message" => "Error creating person: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error creating person: " . $this->conn->error];
         } else {
-            echo json_encode(["success" => true, "message" => "Person added successfully"]);
+            return ["success" => true, "message" => "Person added successfully"];
         }
     }
 
-    //Updates an existing person in the database
-    public function updatePerson($firstName, $surname, $dateOfBirth, $emailAddress, $age, $id)
+    // Updates an existing person in the database
+    public function updatePerson(string $firstName, string $surname, string $dateOfBirth, string $emailAddress, int $age, int $id): array
     {
         $sql = "UPDATE Person SET FirstName='$firstName', Surname='$surname', DateOfBirth='$dateOfBirth', EmailAddress='$emailAddress', Age='$age' WHERE id=$id";
 
         // Error handling
         if ($this->conn->query($sql) === FALSE) {
-            echo json_encode(["success" => false, "message" => "Error updating person: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error updating person: " . $this->conn->error];
         } else {
-            echo json_encode(["success" => true, "message" => "Person updated successfully"]);
+            return ["success" => true, "message" => "Person updated successfully"];
         }
     }
 
     // Loads a person from the database
-    public function loadPerson($id)
+    public function loadPerson(int $id): array
     {
         $sql = "SELECT * FROM Person WHERE id=$id";
         $result = $this->conn->query($sql);
 
         // Error handling
         if ($result === FALSE) {
-            echo json_encode(["success" => false, "message" => "Error loading person: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error loading person: " . $this->conn->error];
         }
 
         // Return the loaded person as an associative array (key-value pairs)
-        return $result->fetch_assoc();
+        return ["success" => true, "data" => $result->fetch_assoc()];
     }
 
     // Saves a person to the database
-    public function savePerson()
+    public function savePerson(): array
     {
         $sql = "INSERT INTO Person (FirstName, Surname, DateOfBirth, EmailAddress, Age)
                 VALUES ('$this->firstName', '$this->surname', '$this->dateOfBirth', '$this->emailAddress', '$this->age')";
 
         if ($this->conn->query($sql) === FALSE) {
-            echo json_encode(["success" => false, "message" => "Error occurred while trying to save the person: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error occurred while trying to save the person: " . $this->conn->error];
         } else {
-            echo json_encode(["success" => true, "message" => "Person saved successfully"]);
+            return ["success" => true, "message" => "Person saved successfully"];
         }
     }
 
     // Deletes a person from the database
-    public function deletePerson($id)
+    public function deletePerson(int $id): array
     {
         $sql = "DELETE FROM Person WHERE id=$id";
 
         if ($this->conn->query($sql) === TRUE) {
-            echo json_encode(["success" => true, "message" => "Record deleted successfully"]);
+            return ["success" => true, "message" => "Record deleted successfully"];
         } else {
-            echo json_encode(["success" => false, "message" => "Error deleting record: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error deleting record: " . $this->conn->error];
         }
     }
 
     // Loads all people from the database
-    public function loadAllPeople()
+    public function loadAllPeople(): array
     {
         $sql = "SELECT * FROM Person";
         $result = $this->conn->query($sql);
 
-        // Error handling-checks if the query was successful
+        // Error handling - check if the query was successful
         if ($result === FALSE) {
-            echo json_encode(["success" => false, "message" => "Error loading all people: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error loading all people: " . $this->conn->error];
         }
 
         // Fetch all people as an array of associative arrays
@@ -118,19 +117,18 @@ class Person
             $allPeople[] = $row;
         }
 
-        // Return the loaded people as an array
-        echo json_encode(["success" => true, "data" => $allPeople]);
+        return ["success" => true, "data" => $allPeople];
     }
 
     // Deletes all people from the database
-    public function deleteAllPeople()
+    public function deleteAllPeople(): array
     {
         $sql = "DELETE FROM Person";
 
         if ($this->conn->query($sql) === TRUE) {
-            echo json_encode(["success" => true, "message" => "All records deleted successfully"]);
+            return ["success" => true, "message" => "All records deleted successfully"];
         } else {
-            echo json_encode(["success" => false, "message" => "Error deleting all records: " . $this->conn->error]);
+            return ["success" => false, "message" => "Error deleting all records: " . $this->conn->error];
         }
     }
 }
@@ -138,7 +136,7 @@ class Person
 // Create an instance of the Person class with the database connection
 $person = new Person($conn);
 
-// Check the request method
+// Check the request method to determine which action to take
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve data from the POST request
     $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : "";
@@ -148,15 +146,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $age = isset($_POST["age"]) ? $_POST["age"] : "";
 
     // Call the createPerson method to handle the form data
-    $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age);
+    $result = $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age);
+
+    // Output the result
+    echo json_encode($result);
+
+} else if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // Call the loadAllPeople method to handle the GET request
+    $result = $person->loadAllPeople();
+
+    // Output the result
+    echo json_encode($result);
 } else {
     // Invalid request method
     echo json_encode(["success" => false, "message" => "Invalid request method"]);
 }
 
-
-
 // Close the database connection
 $conn->close();
+
+
+
+
+
 
 

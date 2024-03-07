@@ -1,8 +1,8 @@
 <?php
-require_once 'vendor/autoload.php'; //loads the Faker library files-generates fake data .
+require_once 'vendor/autoload.php'; // Loads the Faker library files to generate fake data.
 use Faker\Factory as Faker;
 
-//Database connection
+// Database connection
 $servername = "127.0.0.1";
 $username = "root";
 $password = "Devesh0905";
@@ -19,9 +19,9 @@ if ($conn->connect_error) {
 // User Class-Properties and methods defined
 class Person {
 
-    // Properties- representing the attributes of a person
+    // Properties representing the attributes of a person
     public $firstName, $surname, $dateOfBirth, $emailAddress, $age;
-    private $conn; // holds db connection
+    private $conn; // Holds the db connection
 
     // Constructor to set up the database connection
     public function __construct($conn) {
@@ -29,7 +29,8 @@ class Person {
     }
 
     // Methods-functions
-    //Inserts a new person into the database
+
+    // Inserts a new person into the database
     public function createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age) {
 
         $birthDate = new DateTime($dateOfBirth);
@@ -45,7 +46,7 @@ class Person {
         }
     }
 
-    //Updates an existing person in the database
+    // Updates an existing person in the database
     public function updatePerson($firstName, $surname, $dateOfBirth, $emailAddress, $age, $id) {
         $sql = "UPDATE Person SET FirstName='$firstName', Surname='$surname', DateOfBirth='$dateOfBirth', EmailAddress='$emailAddress', Age='$age' WHERE id=$id";
 
@@ -98,7 +99,6 @@ class Person {
         // Error handling-checks if the query was successful
         if ($result === FALSE) {
             echo "Error loading all people: " . $this->conn->error;
-
         }
 
         // Fetch all people as an array of associative arrays
@@ -128,19 +128,19 @@ $person = new Person($conn);
 
 // Example usage
 
-//Creating a new record for a person
+// Creating a new record for a person
 //$person->createPerson('John', 'Doe', '1990-01-01', 'john.doe@example.com', 30);
 
-//Updating a persons record
+// Updating a person's record
 //$person->updatePerson('Jane', 'Doe', '1995-02-15', 'jane.doe@example.com', 27, 1);
 
-//// Load the person from the database
+// Load the person from the database
 //$loadedPerson = $person->loadPerson(1);
 
-//// Output the loaded person
+// Output the loaded person
 //print_r($loadedPerson);
 
-//Save a person
+// Save a person
 //$person->firstName = 'Alice';
 //$person->surname = 'Wonderland';
 //$person->dateOfBirth = '1985-05-20';
@@ -152,8 +152,8 @@ $person = new Person($conn);
 //$person->deletePerson(1);
 
 // Load all people
-$allPeople = $person->loadAllPeople();
-print_r($allPeople);
+//$allPeople = $person->loadAllPeople();
+//print_r($allPeople);
 
 // Delete all people
 //$person->deleteAllPeople();
@@ -166,23 +166,22 @@ for ($i = 0; $i < 10; $i++) {
     $dateOfBirth = $faker->date($format = 'Y-m-d', $max = 'now');
     $emailAddress = $faker->email;
 
-
     // Create a new person in the database
     $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, 0);
 
-// Starting clock time in seconds
+    // Starting clock time in seconds
     $start_time = microtime(true);
     $a = 1;
 
-// Start loop
-    for ($i = 1; $i <= 10000000; $i++) {
+    // Start loop
+    for ($j = 1; $j <= 10000000; $j++) {
         $a++;
     }
 
-// End clock time in seconds
+    // End clock time in seconds
     $end_time = microtime(true);
 
-// Calculating the script execution time
+    // Calculating the script execution time
     $execution_time = $end_time - $start_time;
 
     echo " Execution time of script = " . $execution_time . " seconds";

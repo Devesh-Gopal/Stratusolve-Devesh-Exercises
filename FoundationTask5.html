@@ -1,13 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        //Waits for the document to be fully loaded
+        // Waits for the document to be fully loaded
         $(document).ready(function(){
             // A submit handler is attached to the form
-            $("form").submit(function(e){
+            $("form").submit(function(event){
                 // Prevent the default form submission behavior
-                e.preventDefault();
+                event.preventDefault();
 
                 // Get the maxNumber value that the user entered
                 var maxNumber = $("#maxNumber").val();
@@ -19,8 +20,7 @@
                     success: function(response){
                         // Display the response on the screen
                         $("#result").html("Result: " + response);
-                    },
-
+                    }
                 });
             });
         });

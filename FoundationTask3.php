@@ -1,21 +1,22 @@
 <?php
-// Determine if a given string is a palindrome or not.
+// Determines if a given string is a palindrome or not.
 class Palindrome {
-    public static function isPalindrome($word)
-    {
-        //Spaces are removed and lowercase is done to ignore character case(String Cleaning)
-        $word = str_replace(' ', '', strtolower($word));
+    public static function checkIfPalindrome(string $word): bool {
+        // Remove non-alphanumeric characters, convert to lowercase.
+        $cleanedWord = preg_replace("/[^a-zA-Z0-9]/", '', strtolower($word));
 
-        //Cleaned word must be identical to its reverse. strrev- used to reverse a string
-        return $word === strrev($word);
+        // Cleaned word must be identical to its reverse. strrev is used to reverse a string.
+        return $cleanedWord === strrev($cleanedWord);
     }
 }
 
-if (Palindrome::isPalindrome('Never Odd Or Even'))
-{
+if (Palindrome::checkIfPalindrome('No, Mel Gibson is a casino’s big lemon')) {
     echo 'Palindrome';
-} else
-    {
-        echo 'Not palindrome';
-    }
+} else {
+    echo 'Not palindrome';
+}
+
+
+
+
 
