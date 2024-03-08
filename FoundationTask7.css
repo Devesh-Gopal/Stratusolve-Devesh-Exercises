@@ -17,6 +17,24 @@
     text-transform: capitalize;
 }
 
+/* Edit button */
+.btn-edit {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: .5rem;
+    margin-top: 1rem;
+    font-size: 1.7rem;
+    padding: 1rem 3rem;
+    background: var(--green);
+    color: var(--white);
+    text-align: center;
+}
+
+.btn-edit:hover {
+    background: var(--black);
+}
+
+
 .box {
     width: 100%;
     border-radius: .5rem;

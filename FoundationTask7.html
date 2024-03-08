@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin page</title>
+    <title>CRUD Operations</title>
 
-    <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="FoundationTask7.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-
 </head>
+
 <body>
 
 <div class="container">
@@ -26,6 +24,7 @@
             <input type="text" placeholder="Enter Email Address" name="emailAddress" class="box">
             <input type="number" placeholder="Enter Age" name="age" class="box">
             <button type="button" class="btn" onclick="addPerson()">Add Person</button>
+            <button type="button" class="btn" onclick="editPerson()">Edit Person</button>
         </form>
     </div>
 
@@ -59,21 +58,23 @@
             age: document.forms["personForm"]["age"].value
         };
 
+        console.log("Form Data:", formData);
+
         // Validate form data (you may add more validation as needed)
 
         // Create a new table row
         var newRow = document.createElement("tr");
         newRow.innerHTML = `
-            <td>${formData.firstName}</td>
-            <td>${formData.surname}</td>
-            <td>${formData.dateOfBirth}</td>
-            <td>${formData.emailAddress}</td>
-            <td>${formData.age}</td>
-            <td>
-                <a href="#" class="btn"> <i class="fas fa-edit"></i> edit </a>
-                <a href="#" class="btn"> <i class="fas fa-trash"></i> delete </a>
-            </td>
-        `;
+        <td>${formData.firstName}</td>
+        <td>${formData.surname}</td>
+        <td>${formData.dateOfBirth}</td>
+        <td>${formData.emailAddress}</td>
+        <td>${formData.age}</td>
+        <td>
+            <button class="btn btn-edit" onclick="editPerson(this)" data-id="">Edit</button>
+            <a href="#" class="btn" onclick="deletePerson(this)" data-id=""> <i class="fas fa-trash"></i> delete </a>
+        </td>
+    `;
 
         // Append the new row to the table
         document.getElementById("personTableBody").appendChild(newRow);
@@ -81,60 +82,137 @@
         // Clear the form
         document.getElementById("personForm").reset();
 
-        // Send an AJAX request using jQuery
         $.ajax({
             type: "POST",
             url: "FoundationTask7.php",
             data: formData,
-            success: function(response) {
+            success: function (response) {
                 // Handle the success response
                 console.log(response);
                 // You may update the frontend or perform additional actions here
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Handle the error response
                 console.error("Error:", xhr.statusText);
             }
         });
-
-        // Clear the form
-        document.getElementById("personForm").reset();
     }
-    // Get the table rows from the server
-    function getPersons() {
+
+
+    // Load all people when the page is ready
+    $(document).ready(function () {
+        loadAllPeople();
+    });
+
+    // Function to load all people from the server
+    function loadAllPeople() {
+        $.ajax({
+            type: "GET",
+            url: "FoundationTask7.php",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    // Display the loaded people in the table
+                    displayPeople(response.data);
+                } else {
+                    console.error("Error loading people:", response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                console.error("Error:", xhr.statusText);
+            }
+        });
+    }
+
+    // Function to display the loaded people in the table
+    function displayPeople(people) {
+        var tableBody = document.getElementById("personTableBody");
+        tableBody.innerHTML = ""; // Clear the existing content
+
+        people.forEach(function (person) {
+            console.log(person.id)
+            console.log(person)
+            var newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                    <td>${person.FirstName}</td>
+                    <td>${person.Surname}</td>
+                    <td>${person.DateOfBirth}</td>
+                    <td>${person.EmailAddress}</td>
+                    <td>${person.Age}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="editPerson(this)" data-id="${person.id}">Edit</button>
+                        <a href="#" class="btn" onclick="deletePerson(this)" data-id="${person.id}"> <i class="fas fa-trash"></i> delete </a>
+
+                    </td>
+                `;
+            tableBody.appendChild(newRow);
+        });
+    }
+
+    function editPerson(element) {
+        var row = element.closest("tr");
+
+        var formData = {
+            id: element.getAttribute("data-id"), // Use element.getAttribute instead of row.getAttribute
+            firstName: row.cells[0].innerText,
+            surname: row.cells[1].innerText,
+            dateOfBirth: row.cells[2].innerText,
+            emailAddress: row.cells[3].innerText,
+            age: row.cells[4].innerText
+        };
+
+        // Update the form with the selected person's data
+        document.forms["personForm"]["firstName"].value = formData.firstName;
+        document.forms["personForm"]["surname"].value = formData.surname;
+        document.forms["personForm"]["dateOfBirth"].value = formData.dateOfBirth;
+        document.forms["personForm"]["emailAddress"].value = formData.emailAddress;
+        document.forms["personForm"]["age"].value = formData.age;
+
+        // Optionally, you can highlight the edited row or perform other UI changes here
+
         $.ajax({
             type: "POST",
             url: "FoundationTask7.php",
-            data: { action: "getPersons" }, // Add a parameter to indicate the action
-            success: function(response) {
+            data: formData,
+            success: function (response) {
                 // Handle the success response
                 console.log(response);
-
-                // Parse the JSON response and append rows to the table
-                var persons = JSON.parse(response);
-                for (var i = 0; i < persons.length; i++) {
-                    var person = persons[i];
-                    var newRow = `<tr>
-                        <td>${person.firstName}</td>
-                        <td>${person.surname}</td>
-                        <td>${person.dateOfBirth}</td>
-                        <td>${person.emailAddress}</td>
-                        <td>${person.age}</td>
-                        <td>
-                            <a href="#" class="btn"> <i class="fas fa-edit"></i> edit </a>
-                            <a href="#" class="btn"> <i class="fas fa-trash"></i> delete </a>
-                        </td>
-                    </tr>`;
-                    $("#personTableBody").append(newRow);
-                }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Handle the error response
                 console.error("Error:", xhr.statusText);
             }
         });
     }
+
+
+    function deletePerson(element) {
+
+        var row = element.closest("tr");
+        var id = element.getAttribute("data-id"); // Get the ID from the row
+
+        console.log("Person ID to delete:", id);
+
+        row.remove();
+
+        $.ajax({
+            type: "POST",
+            url: "FoundationTask7.php",
+            data: { action: "delete", id: id }, // Pass the ID and action
+            success: function (response) {
+                // Handle the success response
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                console.error("Error:", xhr.statusText);
+            }
+        });
+    }
+
 </script>
 
 </body>
+
 </html>
