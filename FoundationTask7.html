@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
+    <!-- Meta tags for character set, compatibility, and responsive design -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD Operations</title>
 
+    <!-- External CSS and JavaScript libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="FoundationTask7.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -14,23 +16,32 @@
 
 <body>
 
+<!-- Main container -->
 <div class="container">
+    <h1>CRUD Application</h1>
+
+    <!-- Form for adding a new person -->
     <div class="admin-CRUD Person-form-container">
         <form id="personForm">
             <h3>add a new person</h3>
+            <!-- Input fields for person details -->
             <input type="text" placeholder="Enter First Name" name="firstName" class="box">
             <input type="text" placeholder="Enter Surname" name="surname" class="box">
-            <input type="date" placeholder="Enter DOB" name="dateOfBirth" class="box">
+            <input type="Date" placeholder="Enter DOB" name="dateOfBirth" class="box">
             <input type="text" placeholder="Enter Email Address" name="emailAddress" class="box">
             <input type="number" placeholder="Enter Age" name="age" class="box">
+
+            <!-- Buttons for adding and editing a person -->
             <button type="button" class="btn" onclick="addPerson()">Add Person</button>
-            <button type="button" class="btn" onclick="editPerson()">Edit Person</button>
+            <button type="button" id="UpdateRecord" class="btn" onclick="editPerson2()">Edit Person</button>
         </form>
     </div>
 
+    <!-- Table for displaying people -->
     <div class="person-display">
         <table id="personTable" class="person-display-table">
             <thead>
+            <!-- Table header -->
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -47,34 +58,37 @@
     </div>
 </div>
 
+<!-- JavaScript code for CRUD operations -->
 <script>
+    // Function to add a new person
     function addPerson() {
-        // Get form data
+        // Retrieve form data
         var formData = {
+            action: "create",
             firstName: document.forms["personForm"]["firstName"].value,
             surname: document.forms["personForm"]["surname"].value,
-            dateOfBirth: document.forms["personForm"]["dateOfBirth"].value,
+            dateOfBirth: new Date(document.forms["personForm"]["dateOfBirth"].value).toISOString().slice(0, 10),
             emailAddress: document.forms["personForm"]["emailAddress"].value,
-            age: document.forms["personForm"]["age"].value
+            age: parseInt(document.forms["personForm"]["age"].value, 10)
         };
 
         console.log("Form Data:", formData);
 
         // Validate form data (you may add more validation as needed)
 
-        // Create a new table row
+        // Create a new table row with the provided data
         var newRow = document.createElement("tr");
         newRow.innerHTML = `
-        <td>${formData.firstName}</td>
-        <td>${formData.surname}</td>
-        <td>${formData.dateOfBirth}</td>
-        <td>${formData.emailAddress}</td>
-        <td>${formData.age}</td>
-        <td>
-            <button class="btn btn-edit" onclick="editPerson(this)" data-id="">Edit</button>
-            <a href="#" class="btn" onclick="deletePerson(this)" data-id=""> <i class="fas fa-trash"></i> delete </a>
-        </td>
-    `;
+            <td>${formData.firstName}</td>
+            <td>${formData.surname}</td>
+            <td>${formData.dateOfBirth}</td>
+            <td>${formData.emailAddress}</td>
+            <td>${formData.age}</td>
+            <td>
+                <button class="btn btn-edit" onclick="editPerson(this)" data-id="">Edit</button>
+                <a href="#" class="btn" onclick="deletePerson(this)" data-id=""> <i class="fas fa-trash"></i> delete </a>
+            </td>
+        `;
 
         // Append the new row to the table
         document.getElementById("personTableBody").appendChild(newRow);
@@ -82,6 +96,7 @@
         // Clear the form
         document.getElementById("personForm").reset();
 
+        // Use AJAX to send data to the server for further processing
         $.ajax({
             type: "POST",
             url: "FoundationTask7.php",
@@ -97,7 +112,6 @@
             }
         });
     }
-
 
     // Load all people when the page is ready
     $(document).ready(function () {
@@ -131,30 +145,30 @@
         tableBody.innerHTML = ""; // Clear the existing content
 
         people.forEach(function (person) {
-            console.log(person.id)
-            console.log(person)
+            // Create a new row for each person and append it to the table
             var newRow = document.createElement("tr");
             newRow.innerHTML = `
-                    <td>${person.FirstName}</td>
-                    <td>${person.Surname}</td>
-                    <td>${person.DateOfBirth}</td>
-                    <td>${person.EmailAddress}</td>
-                    <td>${person.Age}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="editPerson(this)" data-id="${person.id}">Edit</button>
-                        <a href="#" class="btn" onclick="deletePerson(this)" data-id="${person.id}"> <i class="fas fa-trash"></i> delete </a>
-
-                    </td>
-                `;
+                <td>${person.FirstName}</td>
+                <td>${person.Surname}</td>
+                <td>${person.DateOfBirth}</td>
+                <td>${person.EmailAddress}</td>
+                <td>${person.Age}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editPerson(this)" data-id="${person.id}">Edit</button>
+                    <a href="#" class="btn" onclick="deletePerson(this)" data-id="${person.id}"> <i class="fas fa-trash"></i> delete </a>
+                </td>
+            `;
             tableBody.appendChild(newRow);
         });
     }
 
+    // Function to populate the form with data for editing
     function editPerson(element) {
         var row = element.closest("tr");
 
+        // Extract data from the selected row
         var formData = {
-            id: element.getAttribute("data-id"), // Use element.getAttribute instead of row.getAttribute
+            id: element.getAttribute("data-id"),
             firstName: row.cells[0].innerText,
             surname: row.cells[1].innerText,
             dateOfBirth: row.cells[2].innerText,
@@ -162,22 +176,42 @@
             age: row.cells[4].innerText
         };
 
-        // Update the form with the selected person's data // updated
+        // Update the form with the selected person's data
         document.forms["personForm"]["firstName"].value = formData.firstName;
         document.forms["personForm"]["surname"].value = formData.surname;
         document.forms["personForm"]["dateOfBirth"].value = formData.dateOfBirth;
         document.forms["personForm"]["emailAddress"].value = formData.emailAddress;
         document.forms["personForm"]["age"].value = formData.age;
 
-        // Optionally, you can highlight the edited row or perform other UI changes here
+        // Set the data-id attribute for the "Edit Person" button
+        document.getElementById("UpdateRecord").setAttribute("data-id", formData.id);
+    }
 
+    // Function to edit a person's details
+    function editPerson2() {
+        var element = document.getElementById("UpdateRecord");
+
+        // Retrieve form data for editing
+        var formData = {
+            id: element.getAttribute("data-id"), // Get the stored ID
+            firstName: document.forms["personForm"]["firstName"].value,
+            surname: document.forms["personForm"]["surname"].value,
+            dateOfBirth: document.forms["personForm"]["dateOfBirth"].value,
+            emailAddress: document.forms["personForm"]["emailAddress"].value,
+            age: document.forms["personForm"]["age"].value
+        };
+
+        console.log("Form Data:", formData);
+
+        // Use AJAX to send data to the server for updating
         $.ajax({
             type: "POST",
-            url: "FoundationTask7.php",
-            data: formData,
+            url: "FoundationTask7.php?loadPerson=true&id=" + formData.id,
+            data: { action: "update", id: formData.id, ...formData },
             success: function (response) {
                 // Handle the success response
                 console.log(response);
+                // You may update the frontend or perform additional actions here
             },
             error: function (xhr, status, error) {
                 // Handle the error response
@@ -186,16 +220,17 @@
         });
     }
 
-
+    // Function to delete a person
     function deletePerson(element) {
-
         var row = element.closest("tr");
         var id = element.getAttribute("data-id"); // Get the ID from the row
 
         console.log("Person ID to delete:", id);
 
+        // Remove the selected row from the table
         row.remove();
 
+        // Use AJAX to send data to the server for deletion
         $.ajax({
             type: "POST",
             url: "FoundationTask7.php",
@@ -216,3 +251,4 @@
 </body>
 
 </html>
+

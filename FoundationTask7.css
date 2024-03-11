@@ -2,11 +2,18 @@
 
 :root{
     --green:#27ae60;
-    --black:#333;
+    --black: #0c0c0c;
     --white:#fff;
     --bg-color:#eee;
     --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
     --border:.1rem solid var(--black);
+}
+/* Heading for CRUD Application */
+h1 {
+    font-size: 2.5rem;
+    color: var(--black);
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
 /* Add a new person */
@@ -25,14 +32,34 @@
     margin-top: 1rem;
     font-size: 1.7rem;
     padding: 1rem 3rem;
-    background: var(--green);
-    color: var(--white);
+    background: #0a68b0 !important;
+    color: var(--white) !important;
     text-align: center;
 }
 
 .btn-edit:hover {
-    background: var(--black);
+    background: #2980b9 !important; /* Change this to the desired hover color */
 }
+
+/* Edit button */
+.btn,
+#UpdateRecord {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: .5rem;
+    margin-top: 1rem;
+    font-size: 1.7rem;
+    padding: 1rem 1rem;
+    background: #0a68b0; /* Change this to the desired color */
+    color: var(--white);
+    text-align: center;
+}
+
+.btn:hover,
+#UpdateRecord:hover {
+    background: #2980b9; /* Change this to the desired hover color */
+}
+
 
 
 .box {
@@ -44,8 +71,6 @@
     background: var(--white);
     text-transform: none;
 }
-
-
 
 html{
     font-size: 62.5%;
@@ -95,7 +120,6 @@ h3 {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-
 }
 
 .admin-person-form-container form{
@@ -151,11 +175,6 @@ h3 {
     border-bottom: var(--border);
 }
 
-/* Edit button */
-.person-display .person-display-table .btn:first-child{
-    margin-top: 0;
-}
-
 /* Delete button */
 .person-display .person-display-table .btn:last-child{
     background: crimson;
@@ -168,15 +187,12 @@ h3 {
 
 /* Person display */
 @media (max-width:991px){
-
     html{
         font-size: 55%;
     }
-
 }
 
 @media (max-width:768px){
-
     .person-display{
         overflow-y:scroll;
     }
@@ -184,13 +200,10 @@ h3 {
     .person-display .person-display-table{
         width: 80rem;
     }
-
 }
 
 @media (max-width:450px){
-
     html{
         font-size: 50%;
     }
-
 }

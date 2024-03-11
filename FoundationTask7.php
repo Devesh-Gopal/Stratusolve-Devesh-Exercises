@@ -1,15 +1,15 @@
 <?php
 
-// Database connection
+// Database connection parameters
 $SERVER_NAME = "127.0.0.1";
 $USERNAME = "root";
 $PASSWORD = "Devesh0905";
 $DB_NAME = "Person";
 
-// Create connection
+// Create a new database connection
 $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
 
-// Check connection
+// Check if the connection is successful
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -35,32 +35,52 @@ class Person
         // Convert the age to an integer
         $age = (int)$age;
 
-        // Validate date of birth (check if it's not empty)
-        if (empty($dateOfBirth)) {
-            return ["success" => false, "message" => "Date of birth cannot be empty"];
+        // Validate input
+        if (empty($firstName) || empty($surname) || empty($dateOfBirth) || empty($emailAddress) || empty($age)) {
+            return ["success" => false, "message" => "All fields are required"];
         }
 
-        $sql = "INSERT INTO Person (FirstName, Surname, DateOfBirth, EmailAddress, Age)
-            VALUES ('$firstName', '$surname', '$dateOfBirth', '$emailAddress', '$age')";
+        // Try multiple date formats until a valid one is found
+        $validFormats = ['Y-m-d', 'd-m-Y', 'm-d-Y', 'Y/d/m', 'm/d/Y', 'd/m/Y'];
+        $formattedDate = null;
 
-        // Error handling
-        if ($this->conn->query($sql) === FALSE) {
-            return ["success" => false, "message" => "Error creating person: " . $this->conn->error];
-        } else {
+        foreach ($validFormats as $format) {
+            $dateObj = DateTime::createFromFormat($format, $dateOfBirth);
+
+            if ($dateObj && $dateObj->format($format) === $dateOfBirth) {
+                $formattedDate = $dateObj->format('Y-m-d');
+                break;
+            }
+        }
+
+        if (!$formattedDate) {
+            return ["success" => false, "message" => "Invalid date of birth format. Please enter a valid date."];
+        }
+
+        // Use prepared statement to prevent SQL injection
+        $stmt = $this->conn->prepare("INSERT INTO Person (FirstName, Surname, DateOfBirth, EmailAddress, Age) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $firstName, $surname, $formattedDate, $emailAddress, $age);
+
+        // Execute the statement
+        if ($stmt->execute()) {
             return ["success" => true, "message" => "Person added successfully"];
+        } else {
+            return ["success" => false, "message" => "Error creating person: " . $stmt->error];
         }
     }
 
     // Updates an existing person in the database
     public function updatePerson(string $firstName, string $surname, string $dateOfBirth, string $emailAddress, int $age, int $id): array
     {
-        $sql = "UPDATE Person SET FirstName='$firstName', Surname='$surname', DateOfBirth='$dateOfBirth', EmailAddress='$emailAddress', Age='$age' WHERE id=$id";
+        $stmt = $this->conn->prepare("UPDATE Person SET FirstName=?, Surname=?, DateOfBirth=?, EmailAddress=?, Age=? WHERE id=?");
+        $stmt->bind_param("ssssii", $firstName, $surname, $dateOfBirth, $emailAddress, $age, $id);
 
-        // Error handling
-        if ($this->conn->query($sql) === FALSE) {
-            return ["success" => false, "message" => "Error updating person: " . $this->conn->error];
-        } else {
+        if ($stmt->execute()) {
             return ["success" => true, "message" => "Person updated successfully"];
+        } else {
+            $errorMessage = "Error updating person: " . $stmt->error;
+            error_log($errorMessage);
+            return ["success" => false, "message" => $errorMessage];
         }
     }
 
@@ -107,6 +127,8 @@ class Person
     // Loads all people from the database
     public function loadAllPeople(): array
     {
+        // Log the id to a file (for debugging purposes)
+        file_put_contents("log.txt", "Loading all people" );
         $sql = "SELECT * FROM Person";
         $result = $this->conn->query($sql);
 
@@ -139,43 +161,25 @@ class Person
 
 // Create an instance of the Person class with the database connection
 $person = new Person($conn);
+
+// Check the HTTP request method
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve data from the POST request
-    $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : "";
-    $surname = isset($_POST["surname"]) ? $_POST["surname"] : "";
-    $dateOfBirth = isset($_POST["dateOfBirth"]) ? $_POST["dateOfBirth"] : "";
-    $emailAddress = isset($_POST["emailAddress"]) ? $_POST["emailAddress"] : "";
-    $age = isset($_POST["age"]) ? $_POST["age"] : "";
-
-    // Call the createPerson method to handle the form data
-    $result = $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age);
-
-    // Output the result
-    echo json_encode($result);
-
-    // Check if the delete action is requested
     $action = isset($_POST["action"]) ? $_POST["action"] : "";
-    if ($action == "delete") {
-        $id = isset($_POST["id"]) ? $_POST["id"] : "";
 
-        // Call the deletePerson method to handle the DELETE request
-        $result = $person->deletePerson($id);
+    if ($action == "create") {
+        // Create a new person
+        $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : "";
+        $surname = isset($_POST["surname"]) ? $_POST["surname"] : "";
+        $dateOfBirth = isset($_POST["dateOfBirth"]) ? $_POST["dateOfBirth"] : "";
+        $emailAddress = isset($_POST["emailAddress"]) ? $_POST["emailAddress"] : "";
+        $age = isset($_POST["age"]) ? $_POST["age"] : "";
 
-        // Output the result
+        // Call the createPerson method and echo the result as JSON
+        $result = $person->createPerson($firstName, $surname, $dateOfBirth, $emailAddress, $age);
         echo json_encode($result);
-        exit(); // Add this line to stop the script after processing the delete action
-    } else {
-        echo json_encode(["success" => false, "message" => "Invalid action"]);
-    }
 
-
-    $action = isset($_POST["action"]) ? $_POST["action"] : "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && $action == "update") {
-        // Retrieve data from the POST request (for update)
-        parse_str(file_get_contents("php://input"), $_POST);
-
-        // Validate required fields
+    } elseif ($action == "update") {
+        // Update an existing person
         $id = isset($_POST["id"]) ? $_POST["id"] : "";
         $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : "";
         $surname = isset($_POST["surname"]) ? $_POST["surname"] : "";
@@ -183,33 +187,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $emailAddress = isset($_POST["emailAddress"]) ? $_POST["emailAddress"] : "";
         $age = isset($_POST["age"]) ? $_POST["age"] : "";
 
-        if (empty($id) || empty($firstName) || empty($surname) || empty($dateOfBirth) || empty($emailAddress) || empty($age)) {
-            // Handle validation error
-            $error = ["error" => "All fields are required"];
-            echo json_encode($error);
-        } else {
-            // Call the updatePerson method to handle the POST request (for update)
-            $result = $person->updatePerson($firstName, $surname, $dateOfBirth, $emailAddress, $age, $id);
+        // Call the updatePerson method and echo the result as JSON
+        $result = $person->updatePerson($firstName, $surname, $dateOfBirth, $emailAddress, $age, $id);
+        echo json_encode($result);
 
-            // Output the result with action set to "update"
-            $response = ["action" => "update", "result" => $result];
-            echo json_encode($response);
-        }
+    } elseif ($action == "delete") {
+        // Delete a person
+        $id = isset($_POST["id"]) ? $_POST["id"] : "";
+
+        // Call the deletePerson method and echo the result as JSON
+        $result = $person->deletePerson($id);
+        echo json_encode($result);
+
+    } else {
+        // Invalid action
+        echo json_encode(["success" => false, "message" => "Invalid action"]);
     }
 
-
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-    // Call the loadAllPeople method to handle the GET request
+    // Load all people
     $result = $person->loadAllPeople();
-
-    // Output the result
     echo json_encode($result);
-
-
 }
 
 // Close the database connection
 $conn->close();
 
-
-//finish edit
