@@ -14,7 +14,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// User class - Properties and methods defined
+// User class - Properties and methods defined //
 class Person
 {
     // Properties representing the attributes of a person
