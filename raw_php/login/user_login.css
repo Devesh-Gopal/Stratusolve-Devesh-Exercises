@@ -1,0 +1,231 @@
+body {
+    font-family: "Fira Sans", sans-serif;
+    background-color: #0c0c0c;
+}
+
+.container-fluid,
+.second-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #0c0c0c;
+    width: 100%;
+
+}
+
+.second-container img {
+    padding: 15px 10px;
+
+}
+
+form {
+    text-align: center;
+}
+
+.second-container form img {
+    width: 50%;
+    padding-top: 55px;
+    padding-bottom: 15px;
+}
+
+.second-container .left-img {
+    width: 80%;
+}
+
+.second-container form h3 {
+    color: #ffffff;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.second-container form input {
+    width: 100%;
+    padding: 10px 5px;
+    border-radius: 5px;
+    border: 5px solid #2e49ce; /* Adjusted to blue */
+    font-size: 1rem;
+    color: #2e49ce; /* Adjusted to blue */
+    margin-bottom: 20px;
+}
+
+.second-container form .signup,
+.second-container form .login {
+    border-radius: 6px;
+    width: 100px;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.4s;
+}
+
+.second-container form .signup:hover,
+.second-container form .login:hover {
+    transform: scale(1.1);
+}
+
+.second-container form .signup {
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.second-container form .signup:hover {
+    background-color: #1b2d5b;
+}
+
+.second-container form .login {
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.second-container form .login:hover {
+
+    background-color: #1b2d5b;
+}
+
+.forgot-password a {
+    color: #538df8;
+}
+
+.second-container p .forgot {
+    padding-left: 17rem;
+}
+
+.signup-text {
+    color: #ffffff;
+}
+
+.signup-text .signup-link {
+    color: #538df8;
+}
+
+.login-text .login-link {
+    color: #538df8;
+}
+
+.login-text {
+    color: #ffffff;
+}
+
+/* PASSWORD REQUIREMENTS */
+#message {
+    display: none;
+    text-align: left;
+}
+
+#message h3 {
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+#message p {
+    font-size: 0.8rem;
+    margin-top: -20px;
+}
+
+.valid {
+    color: #46c546;
+}
+
+.invalid {
+    color: #fc0606;
+}
+
+.alert {
+    background-color: #d4edda; /* Background color for success alert */
+    color: #155724; /* Text color for success alert */
+}
+
+.alert p {
+    color: #4a5fbd; /* Text color for invalid requirements */
+}
+
+.alert p.valid {
+    color: #155724; /* Text color for valid requirements */
+}
+
+
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1030px) {
+    .second-container img {
+        width: 100%;
+    }
+
+    .second-container form input {
+        padding: 5px 5px;
+        font-size: 1rem;
+        color: #0000FF; /* Adjusted to blue */
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .second-container form img {
+        width: 80px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .second-container .left-img {
+        display: none;
+    }
+
+    .second-container form input {
+        width: 120%;
+        margin-right: 100px;
+    }
+
+    .second-container form .login,
+    .second-container form .signup {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .second-container img {
+        width: 70%;
+    }
+
+    .second-container form input {
+        margin-right: 30px;
+    }
+
+    .second-container form .login,
+    .second-container form .signup {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .second-container img {
+        width: 90%;
+    }
+
+    .second-container form .login,
+    .second-container form .signup {
+        margin-left: 25px;
+    }
+
+
+    .second-container form h3,
+    .second-container form p,
+    .second-container form .signup,
+    .second-container form .login,
+    .second-container form .forgot,
+    .second-container form .create-account {
+        color: #0000FF; /* Adjusted to blue */
+    }
+
+    .second-container form .signup:hover,
+    .second-container form .login:hover {
+        color: #0000FF; /* Adjusted to blue */
+        background-color: #ffffff;
+    }
+}
+
+

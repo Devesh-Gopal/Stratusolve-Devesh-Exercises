@@ -1,0 +1,263 @@
+*,
+body {
+    font-family: "Fira Sans", sans-serif;
+}
+
+:root {
+    --color-white: #fdfdfd;
+    --another-white: #fbf8f8;
+    --color-black: #262626;
+    --color-primary: #365194;
+    --color-secondary: #ab8b21;
+    --dark-primary-tint: #2b4178;
+    --light-primary-tint: #4161b4;
+    --light-secondary-tint: #dbb743;
+    --light-blue: #c7d1eb;
+    --light-grey: #b2a7a7;
+}
+
+.background-image {
+    background-image: url('../images/ProfileBackground.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.container{
+    height: calc(100vh - 80px);
+}
+.second-container {
+    background-color: var(--another-white);
+    padding: 50px;
+}
+.second-container .inner-container {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.second-container .gallery img {
+    position: relative;
+    left: 35%;
+    max-width: 250px;
+    border-radius: 50%;
+    margin-top: 50px;
+}
+.second-container input {
+    margin: 20px;
+    padding: 10px 5px;
+}
+.second-container a {
+    text-decoration: none;
+}
+
+.second-container #popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.popup-container a {
+    color: black;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.second-container .edit-btn {
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+}
+.second-container .edit-btn:hover {
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+}
+.second-container .pass-btn {
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+.second-container .pass-btn:hover {
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+.second-container .edit-btn,
+.second-container .pass-btn {
+    transform: scale(1);
+    transition: transform 0.4s;
+}
+.second-container .edit-btn:hover,
+.second-container .pass-btn:hover {
+    transform: scale(1.1);
+}
+.second-container .inner-container .buttons {
+    margin: 10px 0 0 80px;
+    padding-bottom: 15px;
+}
+
+.second-container h4 {
+    text-align: center;
+    color: var(--color-primary);
+}
+.second-container p {
+    text-align: center;
+    margin-top: 0;
+}
+.inputs {
+    margin-right: 30px;
+}
+.btns {
+    margin-left: 80px;
+}
+.btns a {
+    text-decoration: none;
+}
+.editp-btns {
+    margin-left: 40px;
+}
+label {
+    margin-left: 20px;
+}
+
+/* PASSWORD REQUIREMENTS */
+#message {
+    display: none;
+    text-align: left;
+}
+#message h3 {
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+}
+#message p {
+    font-size: 0.8rem;
+    margin-top: -20px;
+    text-align: left;
+}
+.valid {
+    color: green;
+}
+.invalid {
+    color: red;
+}
+
+/* @media screen and (max-width: 1399px) {
+  .second-container .btn{
+    font-size: 0.9rem;
+  }
+  .second-container .icon{
+    margin-left: -70px;
+  }
+  .second-container .inner-container .edit-btn{
+    margin-left: -70px;
+  }
+} */
+
+/* @media screen and (max-width: 1200px) {
+  .second-container .icon{
+    margin-left: -120px;
+  }
+  .second-container .inner-container .buttons{
+    display: block;
+    justify-content: center;
+  }
+} */
+
+/* @media screen and (max-width: 992px){
+  .second-container .buttons{
+    display: block;
+    justify-content: center;
+  }
+  .second-container .edit-btn,
+  .second-container .pass-btn{
+    margin-top: 10px;
+    width: 80%;
+  }
+  .second-container .icon{
+    margin-left: -200px;
+  }
+} */
+
+/* @media screen and (max-width: 767px){
+  .second-container .edit-btn,
+  .second-container .pass-btn{
+    margin-left: 100px;
+    margin-top: 10px;
+    width: 100%;
+  }
+  .second-container .icon{
+    margin-left: -265px;
+  }
+} */
+
+/* @media screen and (max-width: 575px){
+  .second-container .edit-btn,
+  .second-container .pass-btn{
+    width: 50%;
+    margin-left: 140px;
+  }
+  .col-sm-2{
+    display: none;
+  }
+  .second-container .icon{
+    margin-left: -150px;
+  }
+} */
+
+/* @media screen and (max-width: 500px){
+  .second-container .edit-btn,
+  .second-container .pass-btn{
+    margin-left: 125px;
+  }
+} */
+
+@media screen and (max-width: 430px) {
+    .second-container {
+        margin: 0;
+        padding: 0;
+    }
+    .second-container .gallery img {
+        margin-top: 0;
+    }
+    .second-container input {
+        margin: 0;
+        padding: 5px;
+    }
+    .second-container .buttons {
+        margin-left: 90px;
+    }
+    .second-container .btn {
+        margin: 5px;
+    }
+    .second-container .gallery img {
+        left: 15%;
+    }
+    .second-container .inner-container {
+        margin-top: 5px;
+    }
+    .second-container #form {
+        display: block;
+    }
+    .w-500 {
+        width: 400px;
+    }
+    .inputs {
+        width: 100%;
+    }
+}
+
+/* @media screen and (max-width: 375px){
+  .btns{
+    display: block;
+    margin-left: 130px;
+    margin-top: 15px;
+  }
+  .second-container .edit-btn,
+  .second-container .pass-btn{
+    margin-left: 100px;
+  }
+} */
+
+/* .second-container .inner-container .buttons {
+  margin-left: 250px;
+  margin-top: 50px;
+} */

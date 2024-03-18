@@ -1,0 +1,218 @@
+body {
+    font-family: "Fira Sans", sans-serif;
+    background-color: #0c0c0c; /* Black background */
+    margin: 0; /* Remove default body margin */
+    display: flex; /* Use flexbox to center content vertically */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Full viewport height */
+
+
+}
+
+/* Add this CSS to ensure buttons are the same size and display properly */
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.buttons .btn {
+    width: 330%; /* Make buttons take full width */
+}
+
+.col-sm-4 {
+    padding: 0 50px; /* Add spacing between buttons */
+}
+
+
+.container {
+    background-color: #ffffff; /* White background */
+    padding: 50px; /* Add padding for spacing */
+    border-radius: 10px; /* Add border radius for rounded corners */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add box shadow for depth */
+    color: #ffffff; /* White text */
+}
+
+.second-container {
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgb(255, 255, 255);
+}
+
+.second-container .inner-container {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.second-container .gallery img {
+    position: relative;
+    left: 35%;
+    max-width: 250px;
+    border-radius: 50%;
+    margin-top: 50px;
+
+}
+
+.second-container input {
+    margin: 20px;
+    padding: 10px 5px;
+    color: #ffffff; /* White text */
+}
+
+.second-container a {
+    text-decoration: none;
+    color: #ffffff; /* White text */
+}
+
+.second-container #popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fdfdfd;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    color: #000000; /* Black text */
+
+}
+
+.popup-container a {
+    color: #0c0c0c;
+    display: flex;
+    flex-direction: row-reverse;
+    color: #ffffff; /* White text */
+}
+
+.second-container .edit-btn,
+.second-container .pass-btn {
+    color: #4278e3;
+    border: 1px solid #2e49ce;
+}
+
+.second-container .edit-btn:hover,
+.second-container .pass-btn:hover {
+    color: #0a68b0;
+    border: 3px solid #4278e3;
+}
+
+.second-container .inner-container .buttons {
+    margin: 10px 0 0 80px;
+    padding-bottom: 15px;
+}
+
+.second-container h4 {
+    text-align: center;
+    color: #365194;
+    color: #4278e3; /* White text */
+}
+
+.second-container p {
+    text-align: center;
+    margin-top: 0;
+    color: #4278e3; /* White text */
+}
+
+.inputs {
+    margin-right: 30px;
+}
+
+.btns {
+    margin-left: 80px;
+}
+
+.btns a {
+    text-decoration: none;
+    color: #ffffff; /* White text */
+}
+
+.editp-btns {
+    margin-left: 40px;
+}
+
+label {
+    margin-left: 20px;
+    color: #ffffff; /* White text */
+}
+
+/* PASSWORD REQUIREMENTS */
+#message {
+    display: none;
+    text-align: left;
+}
+
+#message h3 {
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    color: #ffffff; /* White text */
+}
+
+#message p {
+    font-size: 0.8rem;
+    margin-top: -20px;
+    text-align: left;
+    color: #ffffff; /* White text */
+}
+
+.valid {
+    color: green;
+}
+
+.invalid {
+    color: red;
+}
+
+@media screen and (max-width: 430px) {
+    .second-container {
+        margin: 0;
+        padding: 0;
+    }
+
+    .second-container .gallery img {
+        margin-top: 0;
+    }
+
+    .second-container input {
+        margin: 0;
+        padding: 5px;
+        color: #ffffff; /* White text */
+    }
+
+    .second-container .buttons {
+        margin-left: 90px;
+    }
+
+    .second-container .btn {
+        margin: 5px;
+    }
+
+    .second-container .gallery img {
+        left: 15%;
+    }
+
+    .second-container .inner-container {
+        margin-top: 5px;
+    }
+
+    .second-container #form {
+        display: block;
+    }
+
+    .w-500 {
+        width: 400px;
+    }
+
+    .inputs {
+        width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+        .first-container {
+            padding: 20px; /* Reduce padding for smaller screens */
+            max-width: 90%; /* Adjust maximum width for smaller screens */
+        }
+    }
+}
+
+
