@@ -80,6 +80,7 @@ $firstname = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
         }
         li {
             margin-bottom: 10px;
+            padding-left: 7px;
         }
         a {
             text-decoration: none;
@@ -161,14 +162,30 @@ $firstname = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
 <body>
 <div class="container">
     <div class="sidebar">
-        <img src="newlogo.png" alt="logo" style="width: 150px; height: 150px; margin-left: -14%; margin-top: -10px; margin-bottom: 10px;">
+        <!-- Your existing sidebar content here -->
+        <img src="newlogo.png" alt="Logo" style="width: 150px; height: 150px; margin-left: -14%; margin-top: -10px; margin-bottom: 10px;">
         <h2>Menu</h2>
         <ul style="list-style: none; padding: 0;">
-            <li style="line-height: 45px;"><a href="user_profile.php" style="color: white;"><img src="usericon.png" alt="Profile" style="width: 40px; height: 42px; margin-right: 5px; vertical-align: middle;"> Profile</a></li>
+            <li style="line-height: 45px;"><a href="user_profile.php" style="color: #ffffff;"><img src="usericon.png" alt="Profile" style="width: 50px; height: 45px; margin-right: 5px; vertical-align: middle;"> Profile</a></li>
         </ul>
+
+        <!-- New content displaying name, last name, and profile picture -->
+        <div style="margin-top: auto; padding: 10px; border-top: 1px solid #ffffff;">
+            <div style="display: flex; align-items: center;">
+                <img src="images/<?php echo $img_path; ?>" alt="Profile picture" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; color: #ffffff; padding-left: -10px;">
+                <div>
+                    <p style="margin: 0; font-size: 16px; height: 10px ;color: #ffffff; "><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?></p>
+
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; padding: 10px;">
+            <form action="logout_user.php" method="post">
+                <button type="submit" style="background-color: #5271FF; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Logout</button>
+            </form>
+        </div>
     </div>
-
-
 
     <div class="main-content">
         <h2>What's happening?!</h2>
@@ -188,7 +205,6 @@ $firstname = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(function() {
@@ -307,5 +323,3 @@ $firstname = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
 
 </body>
 </html>
-
-
